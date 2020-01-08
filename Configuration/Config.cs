@@ -31,7 +31,11 @@ namespace QuantConnect.Configuration
     public static class Config
     {
         //Location of the configuration file.
+#if NETCORE
+        private static string ConfigurationFileName = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "config.json");
+#else
         private static string ConfigurationFileName = "config.json";
+#endif
 
         /// <summary>
         /// Set configuration file on-fly

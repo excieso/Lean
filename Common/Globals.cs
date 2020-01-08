@@ -39,7 +39,11 @@ namespace QuantConnect
         /// </summary>
         public static void Reset ()
         {
+#if NETCORE
+            DataFolder = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Config.Get("data-directory", @"../../../Data/"));
+#else
             DataFolder = Config.Get("data-folder", Config.Get("data-directory", @"../../../Data/"));
+#endif
 
             Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             var versionid = Config.Get("version-id");
@@ -54,7 +58,11 @@ namespace QuantConnect
         /// <summary>
         /// The directory used for storing downloaded remote files
         /// </summary>
+#if NETCORE
+        public static readonly string Cache = System.IO.Path.Combine(System.IO.Path.GetTempPath(), System.Guid.NewGuid().ToString());
+#else
         public const string Cache = "./cache/data";
+#endif
 
         /// <summary>
         /// The version of lean

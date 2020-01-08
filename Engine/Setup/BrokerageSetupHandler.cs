@@ -21,7 +21,9 @@ using Fasterflect;
 using Newtonsoft.Json;
 using QuantConnect.AlgorithmFactory;
 using QuantConnect.Brokerages;
+#if !NETCORE
 using QuantConnect.Brokerages.InteractiveBrokers;
+#endif
 using QuantConnect.Configuration;
 using QuantConnect.Data.Market;
 using QuantConnect.Interfaces;
@@ -207,6 +209,7 @@ namespace QuantConnect.Lean.Engine.Setup
                         // set the object store
                         algorithm.SetObjectStore(parameters.ObjectStore);
 
+#if !NETCORE
                         // If we're going to receive market data from IB,
                         // set the default subscription limit to 100,
                         // algorithms can override this setting in the Initialize method
@@ -215,6 +218,7 @@ namespace QuantConnect.Lean.Engine.Setup
                         {
                             algorithm.Settings.DataSubscriptionLimit = 100;
                         }
+#endif
 
                         //Initialise the algorithm, get the required data:
                         algorithm.Initialize();

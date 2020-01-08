@@ -207,7 +207,11 @@ namespace QuantConnect.Lean.Engine.Results
         /// <summary>
         /// Post the final result back to the controller worker if backtesting, or to console if local.
         /// </summary>
+#if NETCORE
+        BacktestResult SendFinalResult();
+#else
         void SendFinalResult();
+#endif
 
         /// <summary>
         /// Send a algorithm status update to the user of the algorithms running state.

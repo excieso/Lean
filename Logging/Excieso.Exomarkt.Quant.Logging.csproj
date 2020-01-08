@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(DefaultTargetFramework)</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="CompositeLogHandler.cs" />
+    <Compile Remove="CompositeNLogHandler.cs" />
+    <Compile Remove="FileLogHandler.cs" />
+    <Compile Remove="FunctionalLogHandler.cs" />
+    <Compile Remove="NLogHandler.cs" />
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+    <Compile Remove="QueueLogHandler.cs" />
+    <Compile Remove="RegressionFileLogHandler.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="NLog.config" />
+    <None Remove="NLog.xsd" />
+    <None Remove="packages.config" />
+    <None Remove="QuantConnect.Logging.nuspec" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ComponentModel.Composition" Version="$(SystemComponentModelCompositionVersion)" />
+  </ItemGroup>
+
+</Project>

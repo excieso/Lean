@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(DefaultTargetFramework)</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="packages.config" />
+    <None Remove="QuantConnect.Api.nuspec" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonVersion)" />
+    <PackageReference Include="RestSharp" Version="$(RestSharpVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)Common\Excieso.Exomarkt.Quant.csproj" />
+    <ProjectReference Include="$(SolutionDir)Configuration\Excieso.Exomarkt.Quant.Configuration.csproj" />
+    <ProjectReference Include="$(SolutionDir)Logging\Excieso.Exomarkt.Quant.Logging.csproj" />
+  </ItemGroup>
+
+</Project>

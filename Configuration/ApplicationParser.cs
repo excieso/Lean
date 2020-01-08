@@ -37,7 +37,11 @@ namespace QuantConnect.Configuration
             // The default help text is "Show version Information"
             application.VersionOption("-v|-V|--version",
                 () =>
+#if NETCORE
+                    $"Version {Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion}");
+#else
                     $"Version {Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion}");
+#endif
 
             var optionsObject = new Dictionary<string, object>();
 

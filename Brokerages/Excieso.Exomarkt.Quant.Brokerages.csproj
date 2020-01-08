@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(DefaultTargetFramework)</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Alpaca\**" />
+    <Compile Remove="Bitfinex\**" />
+    <Compile Remove="Fxcm\**" />
+    <Compile Remove="GDAX\**" />
+    <Compile Remove="InteractiveBrokers\**" />
+    <Compile Remove="Oanda\**" />
+    <Compile Remove="Tradier\**" />
+    <EmbeddedResource Remove="Alpaca\**" />
+    <EmbeddedResource Remove="Bitfinex\**" />
+    <EmbeddedResource Remove="Fxcm\**" />
+    <EmbeddedResource Remove="GDAX\**" />
+    <EmbeddedResource Remove="InteractiveBrokers\**" />
+    <EmbeddedResource Remove="Oanda\**" />
+    <EmbeddedResource Remove="Tradier\**" />
+    <None Remove="Alpaca\**" />
+    <None Remove="Bitfinex\**" />
+    <None Remove="Fxcm\**" />
+    <None Remove="GDAX\**" />
+    <None Remove="InteractiveBrokers\**" />
+    <None Remove="Oanda\**" />
+    <None Remove="Tradier\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="BaseWebsocketsBrokerage.cs" />
+    <Compile Remove="ISymbolMapper.cs" />
+    <Compile Remove="IWebSocket.cs" />
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+    <Compile Remove="WebSocketError.cs" />
+    <Compile Remove="WebSocketMessage.cs" />
+    <Compile Remove="WebSocketWrapper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="packages.config" />
+    <None Remove="QuantConnect.Brokerages.csproj.DotSettings" />
+    <None Remove="QuantConnect.Brokerages.nuspec" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)Api\Excieso.Exomarkt.Quant.Api.csproj" />
+    <ProjectReference Include="$(SolutionDir)Common\Excieso.Exomarkt.Quant.csproj" />
+    <ProjectReference Include="$(SolutionDir)Configuration\Excieso.Exomarkt.Quant.Configuration.csproj" />
+    <ProjectReference Include="$(SolutionDir)Logging\Excieso.Exomarkt.Quant.Logging.csproj" />
+  </ItemGroup>
+
+</Project>

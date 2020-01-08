@@ -45,6 +45,13 @@ namespace QuantConnect.Lean.Engine
     /// </summary>
     public class Engine
     {
+#if NETCORE
+        static Engine()
+        {
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+        }
+#endif
+
         private bool _historyStartDateLimitedWarningEmitted;
         private readonly bool _liveMode;
         private readonly Lazy<StackExceptionInterpreter> _exceptionInterpreter;
@@ -81,8 +88,15 @@ namespace QuantConnect.Lean.Engine
         /// <param name="job">The algorithm job to be processed</param>
         /// <param name="manager"></param>
         /// <param name="assemblyPath">The path to the algorithm's assembly</param>
+#if NETCORE
+        public void Run(AlgorithmNodePacket job, AlgorithmManager manager, string assemblyPath, out BacktestResult results)
+        {
+            results = default;
+#else
         public void Run(AlgorithmNodePacket job, AlgorithmManager manager, string assemblyPath)
         {
+#endif
+
             var marketHoursDatabaseTask = Task.Run(() => StaticInitializations());
 
             var algorithm = default(IAlgorithm);
@@ -394,6 +408,9 @@ namespace QuantConnect.Lean.Engine
                             AlgorithmHandlers.Results.DebugMessage($"Algorithm Id:({job.AlgorithmId}) completed in {totalSeconds:F2} seconds at {kps:F0}k data points per second. Processing total of {dataPoints:N0} data points.");
                         }
 
+#if NETCORE
+                        results =
+#endif
                         AlgorithmHandlers.Results.SendFinalResult();
                     }
                     catch (Exception err)
@@ -492,6 +509,9 @@ namespace QuantConnect.Lean.Engine
         /// </summary>
         private IHistoryProvider GetHistoryProvider(string historyProvider)
         {
+#if NETCORE
+            return new SubscriptionDataReaderHistoryProvider();
+#else
             if (historyProvider.IsNullOrEmpty())
             {
                 historyProvider = Config.Get("history-provider", "SubscriptionDataReaderHistoryProvider");
@@ -512,6 +532,7 @@ namespace QuantConnect.Lean.Engine
             provider.ReaderErrorDetected += (sender, args) => { AlgorithmHandlers.Results.RuntimeError(args.Message, args.StackTrace); };
 
             return provider;
+#endif
         }
 
         /// <summary>

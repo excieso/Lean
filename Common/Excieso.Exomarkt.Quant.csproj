@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(DefaultTargetFramework)</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+    <Compile Remove="Properties\SharedAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="packages.config" />
+    <None Remove="QuantConnect.Common.nuspec" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CloneExtensions" Version="$(CloneExtensionsVersion)" />
+    <PackageReference Include="Fasterflect.Netstandard" Version="$(FasterflectNetstandardVersion)" />
+    <PackageReference Include="MathNet.Numerics" Version="$(MathNetNumericsVersion)" />
+    <PackageReference Include="Microsoft.CSharp" Version="$(MicrosoftCSharpVersion)" />
+    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonVersion)" />
+    <PackageReference Include="NodaTime" Version="$(NodaTimeVersion)" />
+    <PackageReference Include="QLNet" Version="$(QLNetVersion)" />
+    <PackageReference Include="System.Reflection.Emit" Version="$(SystemReflectionEmitVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(ProjectDir)..\Configuration\Excieso.Exomarkt.Quant.Configuration.csproj" />
+    <ProjectReference Include="$(ProjectDir)..\Logging\Excieso.Exomarkt.Quant.Logging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Python.Runtime">
+      <HintPath>$(ArtifactoryDir)Python.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

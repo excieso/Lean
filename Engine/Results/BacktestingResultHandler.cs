@@ -276,7 +276,9 @@ namespace QuantConnect.Lean.Engine.Results
                         runtimeStatistics,
                         new Dictionary<string, AlgorithmPerformance>());
 
+#if !NETCORE
                     StoreResult(new BacktestResultPacket(_job, completeResult, Algorithm.EndDate, Algorithm.StartDate, progress));
+#endif
 
                     _nextS3Update = DateTime.UtcNow.AddSeconds(30);
                 }
@@ -378,7 +380,11 @@ namespace QuantConnect.Lean.Engine.Results
         /// <summary>
         /// Send a final analysis result back to the IDE.
         /// </summary>
+#if NETCORE
+        public BacktestResult SendFinalResult()
+#else
         public void SendFinalResult()
+#endif
         {
             try
             {
@@ -409,17 +415,27 @@ namespace QuantConnect.Lean.Engine.Results
                     Progress = 1
                 };
 
+#if !NETCORE
                 //Place result into storage.
                 StoreResult(result);
+#endif
 
                 //Second, send the truncated packet:
                 MessagingHandler.Send(result);
 
                 Log.Trace("BacktestingResultHandler.SendAnalysisResult(): Processed final packet");
+
+#if NETCORE
+                return result.Results;
+#endif
             }
             catch (Exception err)
             {
                 Log.Error(err);
+
+#if NETCORE
+                return null;
+#endif
             }
         }
 
@@ -700,8 +716,10 @@ namespace QuantConnect.Lean.Engine.Results
                     copy = LogStore.ToList();
                 }
                 ProcessSynchronousEvents(true);
+#if !NETCORE
                 var logLocation = SaveLogs(_algorithmId, copy);
                 SystemDebugMessage("Your log was successfully created and can be retrieved from: " + logLocation);
+#endif
             }
 
             //Set exit flag, and wait for the messages to send:

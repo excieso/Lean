@@ -1634,12 +1634,20 @@ namespace QuantConnect
                 {
                     an = new AssemblyName(pyObject.Repr().Split('\'')[1]);
                 }
+#if NETCORE
+                var typeBuilder = AssemblyBuilder
+#else
                 var typeBuilder = AppDomain.CurrentDomain
+#endif
                     .DefineDynamicAssembly(an, AssemblyBuilderAccess.Run)
                     .DefineDynamicModule("MainModule")
                     .DefineType(an.Name, TypeAttributes.Class, type);
 
+#if NETCORE
+                pythonType = new PythonActivator(typeBuilder.CreateTypeInfo(), pyObject);
+#else
                 pythonType = new PythonActivator(typeBuilder.CreateType(), pyObject);
+#endif
 
                 ObjectActivator.AddActivator(pythonType.Type, pythonType.Factory);
 

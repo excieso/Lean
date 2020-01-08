@@ -77,9 +77,13 @@ namespace QuantConnect.Lean.Engine.DataFeeds
         {
             _date = date;
             _config = config;
+#if NETCORE
+            _shouldCacheDataPoints = false;
+#else
             _shouldCacheDataPoints = !_config.IsCustomData && _config.Resolution >= Resolution.Hour
                 && _config.Type != typeof(FineFundamental) && _config.Type != typeof(CoarseFundamental)
                 && !DataCacheProvider.IsDataEphemeral;
+#endif
 
             var method = _config.Type.GetMethod("Reader",
                 new[] { typeof(SubscriptionDataConfig), typeof(StreamReader), typeof(DateTime), typeof(bool) });

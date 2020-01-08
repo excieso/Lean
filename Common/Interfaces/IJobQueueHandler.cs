@@ -34,7 +34,11 @@ namespace QuantConnect.Interfaces
         /// Request the next task to run through the engine:
         /// </summary>
         /// <returns>Algorithm job to process</returns>
+#if NETCORE
+        AlgorithmNodePacket NextJob(System.Collections.Generic.Dictionary<string, string> parameters, out string algorithmPath);
+#else
         AlgorithmNodePacket NextJob(out string algorithmPath);
+#endif
 
         /// <summary>
         /// Signal task complete

@@ -20,6 +20,9 @@ using QuantConnect.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+#if NETCORE
+using ZipFile = Ionic.Zip.ZipFile;
+#endif
 
 namespace QuantConnect.Lean.Engine.DataFeeds.Transport
 {

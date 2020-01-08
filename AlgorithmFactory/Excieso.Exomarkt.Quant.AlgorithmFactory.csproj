@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(DefaultTargetFramework)</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="packages.config" />
+    <None Remove="QuantConnect.AlgorithmFactory.nuspec" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="$(MicrosoftCSharpVersion)" />
+    <PackageReference Include="NodaTime" Version="$(NodaTimeVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)Algorithm\Excieso.Exomarkt.Quant.Algorithm.csproj" />
+    <ProjectReference Include="$(SolutionDir)Common\Excieso.Exomarkt.Quant.csproj" />
+    <ProjectReference Include="$(SolutionDir)Configuration\Excieso.Exomarkt.Quant.Configuration.csproj" />
+    <ProjectReference Include="$(SolutionDir)Logging\Excieso.Exomarkt.Quant.Logging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Python.Runtime">
+      <HintPath>$(ArtifactoryDir)Python.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

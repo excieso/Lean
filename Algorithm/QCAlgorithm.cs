@@ -1319,11 +1319,13 @@ namespace QuantConnect.Algorithm
             if (_liveMode) return;
 
             //Validate:
+#if !NETCORE
             //1. Check Range:
             if (end > DateTime.Now.Date.AddDays(-1))
             {
                 end = DateTime.Now.Date.AddDays(-1);
             }
+#endif
 
             //2. Make this at the very end of the requested date
             end = end.RoundDown(TimeSpan.FromDays(1)).AddDays(1).AddTicks(-1);

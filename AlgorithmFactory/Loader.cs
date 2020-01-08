@@ -19,7 +19,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+#if !NETCORE
 using System.Security.Policy;
+#endif
 using Python.Runtime;
 using QuantConnect.Interfaces;
 using QuantConnect.Logging;

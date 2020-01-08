@@ -209,8 +209,10 @@ namespace QuantConnect.Lean.Engine.Alphas
                 }
             }
 
+#if !NETCORE
             // persist insights at exit
             StoreInsights();
+#endif
 
             InsightManager.DisposeSafely();
 

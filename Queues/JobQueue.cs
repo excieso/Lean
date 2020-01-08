@@ -51,7 +51,11 @@ namespace QuantConnect.Queues
             get
             {
                 // we expect this dll to be copied into the output directory
+#if NETCORE
+                return Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), Config.Get("algorithm-location", "QuantConnect.Algorithm.CSharp.dll"));
+#else
                 return Config.Get("algorithm-location", "QuantConnect.Algorithm.CSharp.dll");
+#endif
             }
         }
 
@@ -67,12 +71,17 @@ namespace QuantConnect.Queues
         /// Desktop/Local Get Next Task - Get task from the Algorithm folder of VS Solution.
         /// </summary>
         /// <returns></returns>
+#if NETCORE
+        public AlgorithmNodePacket NextJob(Dictionary<string, string> parameters, out string location)
+#else
         public AlgorithmNodePacket NextJob(out string location)
+#endif
         {
             location = GetAlgorithmLocation();
 
             Log.Trace($"JobQueue.NextJob(): Selected {location}");
 
+#if !NETCORE
             // check for parameters in the config
             var parameters = new Dictionary<string, string>();
 
@@ -81,6 +90,7 @@ namespace QuantConnect.Queues
             {
                 parameters = JsonConvert.DeserializeObject<Dictionary<string, string>>(parametersConfigString);
             }
+#endif
 
             var controls = new Controls()
             {
@@ -198,9 +208,11 @@ namespace QuantConnect.Queues
         /// <param name="job"></param>
         public void AcknowledgeJob(AlgorithmNodePacket job)
         {
+#if !NETCORE
             // Make the console window pause so we can read log output before exiting and killing the application completely
             Console.WriteLine("Engine.Main(): Analysis Complete. Press any key to continue.");
             System.Console.Read();
+#endif
         }
     }
 

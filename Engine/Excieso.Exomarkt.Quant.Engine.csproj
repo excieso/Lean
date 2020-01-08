@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(DefaultTargetFramework)</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+    <Compile Remove="Results\DesktopResultHandler.cs" />
+    <Compile Remove="Results\LiveTradingResultHandler.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="app.config" />
+    <None Remove="packages.config" />
+    <None Remove="QuantConnect.Lean.Engine.nuspec" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ionic.Zip" Version="$(IonicZipVersion)" />
+    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonVersion)" />
+    <PackageReference Include="NodaTime" Version="$(NodaTimeVersion)" />
+    <PackageReference Include="RestSharp" Version="$(RestSharpVersion)" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="$(SystemComponentModelCompositionVersion)" />
+    <PackageReference Include="System.Runtime.Caching" Version="$(SystemRuntimeCachingVersion)" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="$(SystemTextEncodingCodePagesVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)AlgorithmFactory\Excieso.Exomarkt.Quant.AlgorithmFactory.csproj" />
+    <ProjectReference Include="$(SolutionDir)Algorithm\Excieso.Exomarkt.Quant.Algorithm.csproj" />
+    <ProjectReference Include="$(SolutionDir)Algorithm.Framework\Excieso.Exomarkt.Quant.Algorithm.Framework.csproj" />
+    <ProjectReference Include="$(SolutionDir)Api\Excieso.Exomarkt.Quant.Api.csproj" />
+    <ProjectReference Include="$(SolutionDir)Brokerages\Excieso.Exomarkt.Quant.Brokerages.csproj" />
+    <ProjectReference Include="$(SolutionDir)Common\Excieso.Exomarkt.Quant.csproj" />
+    <ProjectReference Include="$(SolutionDir)Compression\Excieso.Exomarkt.Quant.Compression.csproj" />
+    <ProjectReference Include="$(SolutionDir)Configuration\Excieso.Exomarkt.Quant.Configuration.csproj" />
+    <ProjectReference Include="$(SolutionDir)Indicators\Excieso.Exomarkt.Quant.Indicators.csproj" />
+    <ProjectReference Include="$(SolutionDir)Logging\Excieso.Exomarkt.Quant.Logging.csproj" />
+  </ItemGroup>
+
+</Project>
