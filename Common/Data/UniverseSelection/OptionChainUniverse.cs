@@ -120,7 +120,11 @@ namespace QuantConnect.Data.UniverseSelection
             }
 
             // always prepend the underlying symbol
+#if NETCORE
+            var resultingSymbols = LinqExtensions.ToHashSet(_underlyingSymbol.Concat(results));
+#else
             var resultingSymbols = _underlyingSymbol.Concat(results).ToHashSet();
+#endif
 
             // we save off the filtered results to the universe data collection for later
             // population into the OptionChain. This is non-ideal and could be remedied by

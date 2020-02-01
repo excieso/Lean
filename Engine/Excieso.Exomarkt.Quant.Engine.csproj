@@ -27,16 +27,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)AlgorithmFactory\Excieso.Exomarkt.Quant.AlgorithmFactory.csproj" />
-    <ProjectReference Include="$(SolutionDir)Algorithm\Excieso.Exomarkt.Quant.Algorithm.csproj" />
-    <ProjectReference Include="$(SolutionDir)Algorithm.Framework\Excieso.Exomarkt.Quant.Algorithm.Framework.csproj" />
-    <ProjectReference Include="$(SolutionDir)Api\Excieso.Exomarkt.Quant.Api.csproj" />
-    <ProjectReference Include="$(SolutionDir)Brokerages\Excieso.Exomarkt.Quant.Brokerages.csproj" />
-    <ProjectReference Include="$(SolutionDir)Common\Excieso.Exomarkt.Quant.csproj" />
-    <ProjectReference Include="$(SolutionDir)Compression\Excieso.Exomarkt.Quant.Compression.csproj" />
-    <ProjectReference Include="$(SolutionDir)Configuration\Excieso.Exomarkt.Quant.Configuration.csproj" />
-    <ProjectReference Include="$(SolutionDir)Indicators\Excieso.Exomarkt.Quant.Indicators.csproj" />
-    <ProjectReference Include="$(SolutionDir)Logging\Excieso.Exomarkt.Quant.Logging.csproj" />
+    <ProjectReference Include="$(ProjectDir)..\AlgorithmFactory\Excieso.Exomarkt.Quant.AlgorithmFactory.csproj" />
+    <ProjectReference Include="$(ProjectDir)..\Algorithm\Excieso.Exomarkt.Quant.Algorithm.csproj" />
+    <ProjectReference Include="$(ProjectDir)..\Algorithm.Framework\Excieso.Exomarkt.Quant.Algorithm.Framework.csproj" />
+    <ProjectReference Include="$(ProjectDir)..\Api\Excieso.Exomarkt.Quant.Api.csproj" />
+    <ProjectReference Include="$(ProjectDir)..\Brokerages\Excieso.Exomarkt.Quant.Brokerages.csproj" />
+    <ProjectReference Include="$(ProjectDir)..\Common\Excieso.Exomarkt.Quant.csproj" />
+    <ProjectReference Include="$(ProjectDir)..\Compression\Excieso.Exomarkt.Quant.Compression.csproj" />
+    <ProjectReference Include="$(ProjectDir)..\Configuration\Excieso.Exomarkt.Quant.Configuration.csproj" />
+    <ProjectReference Include="$(ProjectDir)..\Indicators\Excieso.Exomarkt.Quant.Indicators.csproj" />
+    <ProjectReference Include="$(ProjectDir)..\Logging\Excieso.Exomarkt.Quant.Logging.csproj" />
   </ItemGroup>
 
 </Project>

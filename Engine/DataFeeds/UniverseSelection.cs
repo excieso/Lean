@@ -214,7 +214,11 @@ namespace QuantConnect.Lean.Engine.DataFeeds
             }
 
             // materialize the enumerable into a set for processing
+#if NETCORE
+            var selections = LinqExtensions.ToHashSet(selectSymbolsResult);
+#else
             var selections = selectSymbolsResult.ToHashSet();
+#endif
 
             var additions = new List<Security>();
             var removals = new List<Security>();

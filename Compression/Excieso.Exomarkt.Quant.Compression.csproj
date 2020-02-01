@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)Common\Excieso.Exomarkt.Quant.csproj" />
-    <ProjectReference Include="$(SolutionDir)Logging\Excieso.Exomarkt.Quant.Logging.csproj" />
+    <ProjectReference Include="$(ProjectDir)..\Common\Excieso.Exomarkt.Quant.csproj" />
+    <ProjectReference Include="$(ProjectDir)..\Logging\Excieso.Exomarkt.Quant.Logging.csproj" />
   </ItemGroup>
 
 </Project>

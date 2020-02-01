@@ -109,7 +109,11 @@ namespace QuantConnect.Data.UniverseSelection
                 _cacheDate = data.Time.ConvertFromUtc(Future.Exchange.TimeZone).Date;
             }
 
+#if NETCORE
+            var resultingSymbols = LinqExtensions.ToHashSet(results);
+#else
             var resultingSymbols = results.ToHashSet();
+#endif
 
             futuresUniverseDataCollection.FilteredContracts = resultingSymbols;
 

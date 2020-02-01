@@ -118,7 +118,11 @@ namespace QuantConnect.Algorithm.Framework.Portfolio
             // Consolidate by date
             var alldates = returnsByDate.SelectMany(r => r.Keys).Distinct();
             var returns = Accord.Math.Matrix.Create(alldates
+#if NETCORE
+                .Select(d => returnsByDate.Select(s => CollectionExtensions.GetValueOrDefault(s, d, double.NaN)).ToArray())
+#else
                 .Select(d => returnsByDate.Select(s => s.GetValueOrDefault(d, double.NaN)).ToArray())
+#endif
                 .Where(r => !r.Select(Math.Abs).Sum().IsNaNOrZero()) // remove empty rows
                 .ToArray());
 

@@ -199,7 +199,11 @@ namespace QuantConnect.Data.UniverseSelection
                 return Unchanged;
             }
 
+#if NETCORE
+            var selections = LinqExtensions.ToHashSet(result);
+#else
             var selections = result.ToHashSet();
+#endif
             var hasDiffs = _previousSelections.AreDifferent(selections);
             _previousSelections = selections;
             if (!hasDiffs)

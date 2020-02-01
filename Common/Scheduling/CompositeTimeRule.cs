@@ -69,7 +69,11 @@ namespace QuantConnect.Scheduling
             {
                 // make unqiue times and order the events before yielding
                 var enumerable = new[] {date};
+#if NETCORE
+                var times = LinqExtensions.ToHashSet(Rules.SelectMany(time => time.CreateUtcEventTimes(enumerable))).OrderBy(x => x);
+#else
                 var times = Rules.SelectMany(time => time.CreateUtcEventTimes(enumerable)).ToHashSet().OrderBy(x => x);
+#endif
                 foreach (var time in times)
                 {
                     yield return time;

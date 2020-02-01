@@ -138,7 +138,11 @@ namespace QuantConnect.Securities
         /// <returns></returns>
         public FutureFilterUniverse ExpirationCycle(int[] months)
         {
+#if NETCORE
+            var monthHashSet = LinqExtensions.ToHashSet(months);
+#else
             var monthHashSet = months.ToHashSet();
+#endif
             return this.Where(x => monthHashSet.Contains(x.ID.Date.Month));
         }
 

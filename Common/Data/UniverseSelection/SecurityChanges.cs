@@ -85,8 +85,13 @@ namespace QuantConnect.Data.UniverseSelection
         /// <param name="removedSecurities">Removed symbols list</param>
         public SecurityChanges(IEnumerable<Security> addedSecurities, IEnumerable<Security> removedSecurities)
         {
+#if NETCORE
+            _addedSecurities = LinqExtensions.ToHashSet(addedSecurities);
+            _removedSecurities = LinqExtensions.ToHashSet(removedSecurities);
+#else
             _addedSecurities = addedSecurities.ToHashSet();
             _removedSecurities = removedSecurities.ToHashSet();
+#endif
         }
 
         /// <summary>
@@ -135,7 +140,11 @@ namespace QuantConnect.Data.UniverseSelection
             if (right == None) return left;
 
             // perf: no need to use Union here, SecurityChanges.Constructor will use hashset
+#if NETCORE
+            var additions = LinqExtensions.ToHashSet(left.AddedSecurities.Concat(right.AddedSecurities));
+#else
             var additions = left.AddedSecurities.Concat(right.AddedSecurities).ToHashSet();
+#endif
             var removals = left.RemovedSecurities.Concat(right.RemovedSecurities).Where(x => !additions.Contains(x));
             return new SecurityChanges(additions, removals);
         }
