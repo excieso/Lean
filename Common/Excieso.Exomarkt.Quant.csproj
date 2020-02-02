@@ -5,16 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Properties\AssemblyInfo.cs" />
-    <Compile Remove="Properties\SharedAssemblyInfo.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="packages.config" />
-    <None Remove="QuantConnect.Common.nuspec" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="CloneExtensions" Version="$(CloneExtensionsVersion)" />
     <PackageReference Include="Fasterflect.Netstandard" Version="$(FasterflectNetstandardVersion)" />
     <PackageReference Include="MathNet.Numerics" Version="$(MathNetNumericsVersion)" />

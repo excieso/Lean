@@ -5,15 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="packages.config" />
-    <None Remove="QuantConnect.Algorithm.Framework.nuspec" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Accord.Statistics" Version="$(AccordVersion)" />
     <PackageReference Include="MathNet.Numerics" Version="$(MathNetNumericsVersion)" />
     <PackageReference Include="Microsoft.CSharp" Version="$(MicrosoftCSharpVersion)" />

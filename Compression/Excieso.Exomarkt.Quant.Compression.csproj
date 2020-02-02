@@ -5,15 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="packages.config" />
-    <None Remove="QuantConnect.Compression.nuspec" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Ionic.Zip" Version="$(IonicZipVersion)" />
     <PackageReference Include="Microsoft.CSharp" Version="$(MicrosoftCSharpVersion)" />
     <PackageReference Include="SharpZipLib" Version="$(SharpZipLibVersion)" />
