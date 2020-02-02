@@ -7,16 +7,11 @@
   <ItemGroup>
     <PackageReference Include="MathNet.Numerics" Version="$(MathNetNumericsVersion)" />
     <PackageReference Include="Microsoft.CSharp" Version="$(MicrosoftCSharpVersion)" />
+    <PackageReference Include="Python.Runtime.NETStandard" Version="$(PythonRuntimeNETStandardVersion)" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="$(ProjectDir)..\Common\Excieso.Exomarkt.Quant.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Python.Runtime">
-      <HintPath>$(ArtifactoryDir)Python.Runtime.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

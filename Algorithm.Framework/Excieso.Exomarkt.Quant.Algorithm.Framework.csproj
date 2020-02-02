@@ -2,24 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>$(DefaultTargetFramework)</TargetFramework>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Accord.Statistics" Version="$(AccordVersion)" />
     <PackageReference Include="MathNet.Numerics" Version="$(MathNetNumericsVersion)" />
     <PackageReference Include="Microsoft.CSharp" Version="$(MicrosoftCSharpVersion)" />
+    <PackageReference Include="Python.Runtime.NETStandard" Version="$(PythonRuntimeNETStandardVersion)" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="$(ProjectDir)..\Algorithm\Excieso.Exomarkt.Quant.Algorithm.csproj" />
     <ProjectReference Include="$(ProjectDir)..\Common\Excieso.Exomarkt.Quant.csproj" />
     <ProjectReference Include="$(ProjectDir)..\Indicators\Excieso.Exomarkt.Quant.Indicators.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Python.Runtime">
-      <HintPath>$(ArtifactoryDir)Python.Runtime.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
