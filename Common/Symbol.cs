@@ -489,9 +489,7 @@ namespace QuantConnect
         /// </summary>
         /// <param name="symbol">The symbol</param>
         /// <returns>The string ticker</returns>
-#if !NETCORE
         [Obsolete("Symbol implicit operator to string is provided for algorithm use only.")]
-#endif
         public static implicit operator string(Symbol symbol)
         {
             return symbol.ToString();
@@ -502,9 +500,7 @@ namespace QuantConnect
         /// </summary>
         /// <param name="ticker">The string</param>
         /// <returns>The symbol</returns>
-#if !NETCORE
         [Obsolete("Symbol implicit operator from string is provided for algorithm use only.")]
-#endif
         public static implicit operator Symbol(string ticker)
         {
             Symbol symbol;

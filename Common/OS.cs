@@ -29,9 +29,7 @@ namespace QuantConnect
     /// <remarks>Good design should remove the need for this function. Over time it should disappear.</remarks>
     public static class OS
     {
-#if !NETCORE
         private static PerformanceCounter _cpuUsageCounter;
-#endif
 
         /// <summary>
         /// Global Flag :: Operating System
@@ -119,7 +117,6 @@ namespace QuantConnect
         /// </summary>
         public static long TotalPhysicalMemoryUsed => GC.GetTotalMemory(false) / (1024 * 1024);
 
-#if !NETCORE
         /// <summary>
         /// Total CPU usage as a percentage
         /// </summary>
@@ -146,7 +143,6 @@ namespace QuantConnect
                 return (decimal) _cpuUsageCounter.NextValue();
             }
         }
-#endif
 
         /// <summary>
         /// Gets the statistics of the machine, including CPU% and RAM
@@ -155,9 +151,7 @@ namespace QuantConnect
         {
             return new Dictionary<string, string>
             {
-#if !NETCORE
                 { "CPU Usage", Invariant($"{CpuUsage:0.0}%")},
-#endif
                 { "Used RAM (MB)", TotalPhysicalMemoryUsed.ToStringInvariant() },
                 { "Total RAM (MB)", "" },
                 { "Used Disk Space (MB)", DriveSpaceUsed.ToStringInvariant() },

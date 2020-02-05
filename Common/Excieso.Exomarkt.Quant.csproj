@@ -13,6 +13,7 @@
     <PackageReference Include="NodaTime" Version="$(NodaTimeVersion)" />
     <PackageReference Include="Python.Runtime.NETStandard" Version="$(PythonRuntimeNETStandardVersion)" />
     <PackageReference Include="QLNet" Version="$(QLNetVersion)" />
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="$(SystemDiagnosticsPerformanceCounterVersion)" />
     <PackageReference Include="System.Reflection.Emit" Version="$(SystemReflectionEmitVersion)" />
   </ItemGroup>
 

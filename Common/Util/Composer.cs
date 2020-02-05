@@ -58,7 +58,11 @@ namespace QuantConnect.Util
         public Composer()
         {
             // grab assemblies from current executing directory if not defined by 'composer-dll-directory' configuration key
+#if NETCORE
+            var primaryDllLookupDirectory = new DirectoryInfo(Config.Get("composer-dll-directory", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))).FullName;
+#else
             var primaryDllLookupDirectory = new DirectoryInfo(Config.Get("composer-dll-directory", AppDomain.CurrentDomain.BaseDirectory)).FullName;
+#endif
             var loadFromPluginDir = !string.IsNullOrWhiteSpace(PluginDirectory)
                 && Directory.Exists(PluginDirectory) &&
                 new DirectoryInfo(PluginDirectory).FullName != primaryDllLookupDirectory;

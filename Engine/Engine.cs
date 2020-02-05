@@ -507,9 +507,6 @@ namespace QuantConnect.Lean.Engine
         /// </summary>
         private IHistoryProvider GetHistoryProvider(string historyProvider)
         {
-#if NETCORE
-            return new SubscriptionDataReaderHistoryProvider();
-#else
             if (historyProvider.IsNullOrEmpty())
             {
                 historyProvider = Config.Get("history-provider", "SubscriptionDataReaderHistoryProvider");
@@ -530,7 +527,6 @@ namespace QuantConnect.Lean.Engine
             provider.ReaderErrorDetected += (sender, args) => { AlgorithmHandlers.Results.RuntimeError(args.Message, args.StackTrace); };
 
             return provider;
-#endif
         }
 
         /// <summary>
