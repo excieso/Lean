@@ -222,7 +222,11 @@ namespace QuantConnect.Algorithm.Framework.Portfolio
             }
             _pendingRemoval.Clear();
 
+#if NETCORE
+            var symbols = LinqExtensions.ToHashSet(insights.Select(x => x.Symbol));
+#else
             var symbols = insights.Select(x => x.Symbol).ToHashSet();
+#endif
             if (symbols.Count == 0)
             {
                 return targets;
