@@ -17,13 +17,16 @@ using System;
 using NUnit.Framework;
 using QuantConnect.Algorithm;
 using QuantConnect.Brokerages;
+using QuantConnect.Brokerages.Backtesting;
 using QuantConnect.Data;
 using QuantConnect.Data.Market;
 using QuantConnect.Interfaces;
+using QuantConnect.Lean.Engine.TransactionHandlers;
 using QuantConnect.Orders;
 using QuantConnect.Orders.Fees;
 using QuantConnect.Securities;
 using QuantConnect.Securities.Option;
+using QuantConnect.Tests.Engine;
 using QuantConnect.Tests.Engine.DataFeeds;
 using QuantConnect.Util;
 using Option = QuantConnect.Securities.Option.Option;
@@ -564,12 +567,12 @@ namespace QuantConnect.Tests.Common.Securities
         public void FreeBuyingPowerPercentDefault_Future()
         {
             var algo = GetAlgorithm();
-            var security = InitAndGetSecurity(algo, 5, SecurityType.Future, "ES");
+            var security = InitAndGetSecurity(algo, 5, SecurityType.Future, "ES", time: new DateTime(2020, 1, 27));
             var model = security.BuyingPowerModel;
 
             var actual = algo.CalculateOrderQuantity(_symbol, 1m * model.GetLeverage(security));
-            // (100000 * 1 * 0.9975 ) / 5200 - 1 order due to fees
-            Assert.AreEqual(18m, actual);
+            // (100000 * 1 * 0.9975 ) / 6600 - 1 order due to fees
+            Assert.AreEqual(13m, actual);
             Assert.IsTrue(HasSufficientBuyingPowerForOrder(actual, security, algo));
             Assert.AreEqual(algo.Portfolio.Cash, model.GetBuyingPower(algo.Portfolio, security, OrderDirection.Buy));
         }
@@ -712,19 +715,32 @@ namespace QuantConnect.Tests.Common.Securities
             var security = InitAndGetSecurity(algo, 5);
             security.Holdings.SetHoldings(security.Price, 1000 * side);
             algo.Portfolio.CashBook.Add(algo.AccountCurrency, -100000, 1);
+            var fakeOrderProcessor = new FakeOrderProcessor();
+            algo.Transactions.SetOrderProcessor(fakeOrderProcessor);
 
             Assert.IsTrue(algo.Portfolio.MarginRemaining < 0);
 
-            var actual = security.BuyingPowerModel.GetMaximumOrderQuantityForTargetBuyingPower(
+            var quantity = security.BuyingPowerModel.GetMaximumOrderQuantityForTargetBuyingPower(
                 new GetMaximumOrderQuantityForTargetBuyingPowerParameters(algo.Portfolio,
                     security,
-                    target * side));
-
-            Assert.AreEqual(isError, actual.IsError);
+                    target * side)).Quantity;
             if (!isError)
             {
-                Assert.AreEqual(1000 * side * -1, actual.Quantity);
+                Assert.AreEqual(1000 * side * -1, quantity);
             }
+            else
+            {
+                // even if we don't have margin 'GetMaximumOrderQuantityForTargetBuyingPower' doesn't care
+                Assert.AreNotEqual(0, quantity);
+            }
+
+            var order = new MarketOrder(security.Symbol, quantity, new DateTime(2020, 1, 1));
+            fakeOrderProcessor.AddTicket(order.ToOrderTicket(algo.Transactions));
+            var actual = security.BuyingPowerModel.HasSufficientBuyingPowerForOrder(
+                new HasSufficientBuyingPowerForOrderParameters(algo.Portfolio,
+                    security,
+                    order));
+            Assert.AreEqual(!isError, actual.IsSufficient);
         }
 
         private static QCAlgorithm GetAlgorithm()
@@ -738,7 +754,7 @@ namespace QuantConnect.Tests.Common.Securities
             return algo;
         }
 
-        private static Security InitAndGetSecurity(QCAlgorithm algo, decimal fee, SecurityType securityType = SecurityType.Equity, string symbol = "SPY")
+        private static Security InitAndGetSecurity(QCAlgorithm algo, decimal fee, SecurityType securityType = SecurityType.Equity, string symbol = "SPY", DateTime? time = null)
         {
             algo.SubscriptionManager.SetDataManager(new DataManagerStub(algo));
             Security security;
@@ -763,15 +779,15 @@ namespace QuantConnect.Tests.Common.Securities
             }
 
             security.FeeModel = new ConstantFeeModel(fee);
-            Update(security, 25);
+            Update(security, 25, time);
             return security;
         }
 
-        private static void Update(Security security, decimal close)
+        private static void Update(Security security, decimal close, DateTime? time = null)
         {
             security.SetMarketPrice(new TradeBar
             {
-                Time = DateTime.Now,
+                Time = time ?? DateTime.Now,
                 Symbol = security.Symbol,
                 Open = close,
                 High = close,

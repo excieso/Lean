@@ -89,15 +89,8 @@ namespace QuantConnect.Lean.Engine
         /// <param name="manager">The algorithm manager instance</param>
         /// <param name="assemblyPath">The path to the algorithm's assembly</param>
         /// <param name="workerThread">The worker thread instance</param>
-#if NETCORE
-        public void Run(AlgorithmNodePacket job, AlgorithmManager manager, string assemblyPath, WorkerThread workerThread, out BacktestResult results)
-        {
-            results = default;
-#else
         public void Run(AlgorithmNodePacket job, AlgorithmManager manager, string assemblyPath, WorkerThread workerThread)
         {
-#endif
-
             var marketHoursDatabaseTask = Task.Run(() => StaticInitializations());
 
             var algorithm = default(IAlgorithm);
@@ -108,18 +101,12 @@ namespace QuantConnect.Lean.Engine
 
                 //Reset thread holders.
                 var initializeComplete = false;
-                Thread threadResults = null;
-                Thread threadRealTime = null;
-                Thread threadAlphas = null;
 
                 //-> Initialize messaging system
                 SystemHandlers.Notify.SetAuthentication(job);
 
                 //-> Set the result handler type for this algorithm job, and launch the associated result thread.
                 AlgorithmHandlers.Results.Initialize(job, SystemHandlers.Notify, SystemHandlers.Api, AlgorithmHandlers.Transactions);
-
-                threadResults = new Thread(AlgorithmHandlers.Results.Run, 0) { IsBackground = true, Name = "Result Thread" };
-                threadResults.Start();
 
                 IBrokerage brokerage = null;
                 DataManager dataManager = null;
@@ -325,14 +312,6 @@ namespace QuantConnect.Lean.Engine
                     //Send status to user the algorithm is now executing.
                     AlgorithmHandlers.Results.SendStatusUpdate(AlgorithmStatus.Running);
 
-                    //Launch the data, transaction and realtime handlers into dedicated threads
-                    threadRealTime = new Thread(AlgorithmHandlers.RealTime.Run) { IsBackground = true, Name = "RealTime Thread" };
-                    threadAlphas = new Thread(() => AlgorithmHandlers.Alphas.Run()) {IsBackground = true, Name = "Alpha Thread" };
-
-                    //Launch the data feed, result sending, and transaction models/handlers in separate threads.
-                    threadRealTime.Start(); // RealTime scan time for time based events:
-                    threadAlphas.Start(); // Alpha thread for processing algorithm alpha insights
-
                     // Result manager scanning message queue: (started earlier)
                     AlgorithmHandlers.Results.DebugMessage(
                         $"Launching analysis for {job.AlgorithmId} with LEAN Engine v{Globals.Version}");
@@ -405,11 +384,6 @@ namespace QuantConnect.Lean.Engine
                             var kps = dataPoints / (double) 1000 / totalSeconds;
                             AlgorithmHandlers.Results.DebugMessage($"Algorithm Id:({job.AlgorithmId}) completed in {totalSeconds:F2} seconds at {kps:F0}k data points per second. Processing total of {dataPoints:N0} data points.");
                         }
-
-#if NETCORE
-                        results =
-#endif
-                        AlgorithmHandlers.Results.SendFinalResult();
                     }
                     catch (Exception err)
                     {
@@ -418,12 +392,13 @@ namespace QuantConnect.Lean.Engine
 
                     //Before we return, send terminate commands to close up the threads
                     AlgorithmHandlers.Transactions.Exit();
-                    AlgorithmHandlers.DataFeed.Exit();
                     AlgorithmHandlers.RealTime.Exit();
-                    AlgorithmHandlers.Alphas.Exit();
                     dataManager?.RemoveAllSubscriptions();
                     workerThread?.Dispose();
                 }
+                // Close data feed, alphas. Could be running even if algorithm initialization failed
+                AlgorithmHandlers.DataFeed.Exit();
+                AlgorithmHandlers.Alphas.Exit();
 
                 //Close result handler:
                 AlgorithmHandlers.Results.Exit();
@@ -445,10 +420,6 @@ namespace QuantConnect.Lean.Engine
                     }
                     millisecondTotalWait += millisecondInterval;
                 }
-
-                //Terminate threads still in active state.
-                if (threadResults != null && threadResults.IsAlive) threadResults.Abort();
-                if (threadAlphas != null && threadAlphas.IsAlive) threadAlphas.Abort();
 
                 if (brokerage != null)
                 {
