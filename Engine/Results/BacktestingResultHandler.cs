@@ -225,9 +225,7 @@ namespace QuantConnect.Lean.Engine.Results
                         runtimeStatistics,
                         new Dictionary<string, AlgorithmPerformance>()));
 
-#if !NETCORE
                     StoreResult(new BacktestResultPacket(_job, completeResult, Algorithm.EndDate, Algorithm.StartDate, progress));
-#endif
 
                     _nextS3Update = DateTime.UtcNow.AddSeconds(30);
                 }
@@ -308,8 +306,10 @@ namespace QuantConnect.Lean.Engine.Results
                             result.Results.TotalPerformance,
                             result.Results.AlphaRuntimeStatistics));
                     }
+#if !NETCORE
                     // Save results
                     SaveResults(key, results);
+#endif
                 }
                 else
                 {
@@ -354,10 +354,8 @@ namespace QuantConnect.Lean.Engine.Results
                     Progress = 1
                 };
 
-#if !NETCORE
                 //Place result into storage.
                 StoreResult(result);
-#endif
 
                 //Second, send the truncated packet:
                 MessagingHandler.Send(result);
@@ -626,10 +624,8 @@ namespace QuantConnect.Lean.Engine.Results
                     copy = LogStore.ToList();
                 }
                 ProcessSynchronousEvents(true);
-#if !NETCORE
                 var logLocation = SaveLogs(_algorithmId, copy);
                 SystemDebugMessage("Your log was successfully created and can be retrieved from: " + logLocation);
-#endif
 
                 // Set exit flag, update task will send any message before stopping
                 ExitTriggered = true;

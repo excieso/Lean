@@ -267,7 +267,9 @@ namespace QuantConnect.Lean.Engine.Results
             var filename = $"{id}-log.txt";
             var path = GetResultsPath(filename);
             var logLines = logs.Select(x => x.Message);
+#if !NETCORE
             File.WriteAllLines(path, logLines);
+#endif
             return path;
         }
 
