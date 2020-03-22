@@ -210,10 +210,8 @@ namespace QuantConnect.Lean.Engine.Alphas
             _storeTimer.DisposeSafely();
             _storeTimer = null;
 
-#if !NETCORE
             // persist insights at exit
             StoreInsights();
-#endif
 
             InsightManager?.DisposeSafely();
 
@@ -237,7 +235,9 @@ namespace QuantConnect.Lean.Engine.Alphas
                     var insights = InsightManager.AllInsights.OrderBy(insight => insight.GeneratedTimeUtc).ToList();
                     if (insights.Count > 0)
                     {
+#if !NETCORE
                         File.WriteAllText(_alphaResultsPath, JsonConvert.SerializeObject(insights, Formatting.Indented));
+#endif
                     }
                 }
                 finally
