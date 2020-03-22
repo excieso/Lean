@@ -306,10 +306,8 @@ namespace QuantConnect.Lean.Engine.Results
                             result.Results.TotalPerformance,
                             result.Results.AlphaRuntimeStatistics));
                     }
-#if !NETCORE
                     // Save results
                     SaveResults(key, results);
-#endif
                 }
                 else
                 {
