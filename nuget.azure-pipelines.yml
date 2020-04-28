@@ -1,0 +1,41 @@
+resources:
+  repositories:
+  - repository: build
+    name: build
+    type: git
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- checkout: build
+- checkout: self
+
+- task: UseDotNet@2
+  inputs:
+    packageType: sdk
+    version: '3.1.x'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: build
+    projects: '**/Excieso.Exomarkt.Quant.Lib.sln'
+    arguments: '--configuration Release --version-suffix ".$(build.buildId)"'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: pack
+    packagesToPack: '**/Excieso.Exomarkt.Quant.Lib.sln'
+    arguments: '--configuration Release --no-restore --no-build'
+    buildProperties: 'VersionSuffix=.$(build.buildId)'
+
+- task: NuGetCommand@2
+  inputs:
+    command: push
+    feedsToUse: 'select'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: 'exomarkt'

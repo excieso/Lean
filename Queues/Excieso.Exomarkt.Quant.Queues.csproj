@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(DefaultTargetFramework)</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="$(MicrosoftCSharpVersion)" />
+    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(ProjectDir)..\Common\Excieso.Exomarkt.Quant.csproj" />
+    <ProjectReference Include="$(ProjectDir)..\Configuration\Excieso.Exomarkt.Quant.Configuration.csproj" />
+    <ProjectReference Include="$(ProjectDir)..\Logging\Excieso.Exomarkt.Quant.Logging.csproj" />
+  </ItemGroup>
+
+</Project>
