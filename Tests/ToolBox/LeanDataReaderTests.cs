@@ -29,7 +29,7 @@ using QuantConnect.Data.Consolidators;
 
 namespace QuantConnect.Tests.ToolBox
 {
-    [TestFixture]
+    [TestFixture, Parallelizable(ParallelScope.Fixtures)]
     public class LeanDataReaderTests
     {
         string _dataDirectory = "../../../Data/";
@@ -105,8 +105,7 @@ namespace QuantConnect.Tests.ToolBox
             {
                 var leanDataReader = new LeanDataReader(config, future, res, date, _dataDirectory);
 
-                var data = leanDataReader.Parse().ToList();
-                foreach (var bar in data)
+                foreach (var bar in leanDataReader.Parse())
                 {
                     //write base data type back to string
                     sb.AppendLine(LeanData.GenerateLine(bar, SecurityType.Future, res));
@@ -185,10 +184,9 @@ namespace QuantConnect.Tests.ToolBox
 
                     var leanDataReader = new LeanDataReader(configs[future.Value], future, inputResolution, date, _dataDirectory);
 
-                    var data = leanDataReader.Parse().ToList();
                     var consolidator = consolidators[future.Value];
 
-                    foreach (var bar in data)
+                    foreach (var bar in leanDataReader.Parse())
                     {
                         consolidator.Update(bar);
                     }
@@ -227,10 +225,10 @@ namespace QuantConnect.Tests.ToolBox
         {
             // Act
             var ldr = new LeanDataReader(composedFilePath);
-            var data = ldr.Parse().ToArray();
+            var data = ldr.Parse().ToList();
             // Assert
             Assert.True(symbol.Equals(data.First().Symbol));
-            Assert.AreEqual(rowsInfile, data.Length);
+            Assert.AreEqual(rowsInfile, data.Count);
             Assert.AreEqual(sumValue, data.Sum(c => c.Value));
         }
 
@@ -337,19 +335,21 @@ namespace QuantConnect.Tests.ToolBox
 
             // Act
             var ldr = new LeanDataReader(filepath);
-            var data = ldr.Parse().ToArray();
+            var data = ldr.Parse().ToList();
             // Assert
             Assert.True(symbol.Equals(data.First().Symbol));
-            Assert.AreEqual(rowsInfile, data.Length);
+            Assert.AreEqual(rowsInfile, data.Count);
             Assert.AreEqual(sumValue, data.Sum(c => c.Value));
         }
 
         public static object[] SpotMarketCases =
         {
-            new object[] {"equity", "usa", "daily", "aig", "aig.zip", 5157, 310723.935},
-            new object[] {"equity", "usa", "minute", "aapl", "20140605_trade.zip", 658, 425068.8450},
-            new object[] {"equity", "usa", "second", "ibm", "20131010_trade.zip", 4409, 809851.9580},
-            new object[] {"equity", "usa", "tick", "bac", "20131011_trade.zip", 112230, 1592319.5871},
+            //TODO: generate Low resolution sample data for equities
+            new object[] {"equity", "usa", "daily", "aig", "aig.zip", 5580, 331752.9901},
+            new object[] {"equity", "usa", "minute", "aapl", "20140605_trade.zip", 658, 425067.37},
+            new object[] {"equity", "usa", "minute", "ibm", "20131010_quote.zip", 584, 107061.28},
+            new object[] {"equity", "usa", "second", "ibm", "20131010_trade.zip", 2878, 528701.39},
+            new object[] {"equity", "usa", "tick", "bac", "20131011_trade.zip", 108505, 1539443.26},
             new object[] {"forex", "fxcm", "minute", "eurusd", "20140502_quote.zip", 958, 1327.638085},
             new object[] {"forex", "fxcm", "second", "nzdusd", "20140514_quote.zip", 25895, 22432.757185},
             new object[] {"forex", "fxcm", "tick", "eurusd", "20140507_quote.zip", 89504, 124613.655665},

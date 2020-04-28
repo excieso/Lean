@@ -31,7 +31,7 @@ namespace QuantConnect.Tests.Common.Data
         private Dictionary<Language, dynamic> _weeklyFuncDictionary;
         private Dictionary<Language, dynamic> _monthlyFuncDictionary;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void SetUp()
         {
             _dailyFuncDictionary = new Dictionary<Language, dynamic> { { Language.CSharp, TimeSpan.FromDays(1) } };
@@ -514,7 +514,7 @@ def Monthly(dt):
             var calendarInfo = quarterly(new DateTime(2020, 5, 1));
 
             Assert.AreEqual(new DateTime(2020, 1, 1), calendarInfo.Start);
-            Assert.AreEqual(TimeSpan.FromDays(365), calendarInfo.Period);
+            Assert.AreEqual(TimeSpan.FromDays(366), calendarInfo.Period);   // leap year
 
             calendarInfo = quarterly(new DateTime(2021, 11, 1));
 

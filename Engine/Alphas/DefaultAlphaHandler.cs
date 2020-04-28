@@ -27,6 +27,7 @@ using QuantConnect.Algorithm.Framework.Alphas.Analysis.Providers;
 using QuantConnect.Configuration;
 using QuantConnect.Interfaces;
 using QuantConnect.Lean.Engine.Alpha;
+using QuantConnect.Lean.Engine.TransactionHandlers;
 using QuantConnect.Logging;
 using QuantConnect.Packets;
 using QuantConnect.Statistics;
@@ -101,7 +102,8 @@ namespace QuantConnect.Lean.Engine.Alphas
         /// <param name="algorithm">The algorithm instance</param>
         /// <param name="messagingHandler">Handler used for sending insights</param>
         /// <param name="api">Api instance</param>
-        public virtual void Initialize(AlgorithmNodePacket job, IAlgorithm algorithm, IMessagingHandler messagingHandler, IApi api)
+        /// <param name="transactionHandler">Algorithms transaction handler</param>
+        public virtual void Initialize(AlgorithmNodePacket job, IAlgorithm algorithm, IMessagingHandler messagingHandler, IApi api, ITransactionHandler transactionHandler)
         {
             // initializing these properties just in case, doesn't hurt to have them populated
             Job = job;
@@ -144,7 +146,7 @@ namespace QuantConnect.Lean.Engine.Alphas
         protected virtual void AddInsightManagerCustomExtensions(StatisticsInsightManagerExtension statistics)
         {
             // send scored insights to messaging handler
-            InsightManager.AddExtension(new AlphaResultPacketSender(Job, MessagingHandler, TimeSpan.FromSeconds(1), 50));
+            InsightManager.AddExtension(new AlphaResultPacketSender(Job, MessagingHandler, TimeSpan.FromSeconds(3), 50));
             InsightManager.AddExtension(new ChartingInsightManagerExtension(Algorithm, statistics));
         }
 
@@ -236,6 +238,11 @@ namespace QuantConnect.Lean.Engine.Alphas
                     if (insights.Count > 0)
                     {
 #if !NETCORE
+                        var directory = Directory.GetParent(_alphaResultsPath);
+                        if (!directory.Exists)
+                        {
+                            directory.Create();
+                        }
                         File.WriteAllText(_alphaResultsPath, JsonConvert.SerializeObject(insights, Formatting.Indented));
 #endif
                     }

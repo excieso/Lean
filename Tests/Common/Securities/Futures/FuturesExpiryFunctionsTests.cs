@@ -24,7 +24,7 @@ using System.IO;
 
 namespace QuantConnect.Tests.Common.Securities.Futures
 {
-    [TestFixture]
+    [TestFixture, Parallelizable(ParallelScope.Fixtures)]
     public class FuturesExpiryFunctionsTests
     {
         private IDictionary<String, List<Dates>> _data = new Dictionary<String, List<Dates>>();
@@ -49,7 +49,7 @@ namespace QuantConnect.Tests.Common.Securities.Futures
         private const string TwelveOne = "12:01:00";
         private const string FourPmLondonTime = "15:00:00";
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void Init()
         {
             var path = Path.Combine("TestData", "FuturesExpiryFunctionsTestData.xml");
