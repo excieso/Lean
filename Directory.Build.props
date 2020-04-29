@@ -1,5 +1,5 @@
 <Project>
 
-  <Import Project="$(ProjectDir)..\build\Build.Lean.props"/>
-  
+  <Import Project="$(ProjectDir)..\build\Build.Lean.props" Condition="$(MSBuildProjectName.StartsWith('Excieso'))" />
+
 </Project>
