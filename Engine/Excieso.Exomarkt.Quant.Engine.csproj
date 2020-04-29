@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ionic.Zip" Version="$(IonicZipVersion)" />
+    <PackageReference Include="DotNetZip" Version="$(DotNetZipVersion)" />
     <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonVersion)" />
     <PackageReference Include="NodaTime" Version="$(NodaTimeVersion)" />
     <PackageReference Include="RestSharp" Version="$(RestSharpVersion)" />

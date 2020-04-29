@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ionic.Zip" Version="$(IonicZipVersion)" />
+    <PackageReference Include="DotNetZip" Version="$(DotNetZipVersion)" />
     <PackageReference Include="Microsoft.CSharp" Version="$(MicrosoftCSharpVersion)" />
     <PackageReference Include="SharpZipLib" Version="$(SharpZipLibVersion)" />
   </ItemGroup>
