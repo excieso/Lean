@@ -14,7 +14,7 @@
     <Compile Remove="WebSocketCloseData.cs" />
     <Compile Remove="WebSocketError.cs" />
     <Compile Remove="WebSocketMessage.cs" />
-    <Compile Remove="WebSocketWrapper.cs" />
+    <Compile Remove="WebSocketClientWrapper.cs" />
   </ItemGroup>
 
   <ItemGroup>
